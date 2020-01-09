@@ -6,10 +6,12 @@ info:
   version: '1.0'
 servers:
   - url: 'https://api.signhost.com/api'
+    description: Production
 paths:
   '/transaction/{transactionId}':
       get:
         description: Get the transacton
+        summary: Get information about a transaction
         responses:
           '401':
             description: 	Not authorized to access the specified transaction
@@ -105,6 +107,7 @@ paths:
           example: '67b9e140-b0f6-4c36-9b35-977041968185'
       delete:
         description: Deletes the transaction
+        summary: Delete a transaction
         responses:
           '200':
             description: 'The transaction is succesfully deleted'
@@ -136,32 +139,118 @@ paths:
         description: ''
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/CreateTransaction-ExampleRequest'
             example:
               Signers:
-                - Email: EnterAValidEMailAddressHere
-                  ScribbleName: Example
-                  SendSignRequest: false
-                  SignRequestMessage: 'Hello, this is an example! Please sign this!'
+                - Email: user@example.com
+                  RequireScribble: true
+                  SendSignRequest: true
+                  SignRequestMessage: 'Hello, could you please sign this document? Best regards, John Doe'
+                  DaysToRemind: 15
+                  ScribbleName: John Doe
+                  ScribbleNameFixed: false
                   Verifications:
-                    - Type: PhoneNumber
-                      Number: '+31123456789'
-                    - Type: Scribble
-                      RequireHandsignature: true
+                    - Type: iDeal
+                - Email: anotheruser@example.com
+                  RequireScribble: true
+                  SendSignRequest: true
+                  SignRequestMessage: 'Hello, could you please sign this document? Best regards, John Doe'
+                  DaysToRemind: 15
+                  ScribbleName: John Doe
+                  ScribbleNameFixed: false
+                  Mobile: '+31612345678'
+                  RequireSmsVerification: true
+              SendEmailNotifications: true
         required: true
       responses:
         '200':
-          description: ''
+          description: 'This method returns the newly created transaction. (The default values for the second signer have been stripped away)'
           headers: {}
           content:
-            text/plain:
+            application/json:
               schema:
                 type: object
+              example:
+                Id: 67b9e140-b0f6-4c36-9b35-977041968185
+                Status: 20
+                Seal: true
+                Signers:
+                  - Id: e0b39ec0-e0c6-45d9-bf0d-ae8cafbe2f48
+                    Expires: null
+                    Email: user@example.com
+                    Mobile: null
+                    Iban: null
+                    BSN: null
+                    RequireScribbleName: false
+                    RequireScribble: true
+                    RequireEmailVerification: false
+                    RequireSmsVerification: false
+                    RequireDigidVerification: false
+                    RequireSurfnetVerification: false
+                    Verifications:
+                      - Type: IPAddress
+                        IPAddress: 203.0.113.5
+                      - Type: iDeal
+                    SendSignRequest: true
+                    SendSignConfirmation: null
+                    SignRequestMessage: 'Hello, could you please sign this document? Best regards, John Doe'
+                    DaysToRemind: 15
+                    Language: en-US
+                    ScribbleName: John Doe
+                    ScribbleNameFixed: false
+                    Reference: 'Client #123'
+                    ReturnUrl: 'http://signhost.com'
+                    Activities:
+                      - Id: 91709d15-df2e-48a1-ac90-276f0360ce08
+                        Code: 103
+                        Activity: Opened
+                        CreatedDateTime: '2016-06-15T23:33:04.1965465+02:00'
+                      - Id: 3dfc9002-4d2d-467d-8266-e57b5b70a134
+                        Code: 105
+                        Activity: DocumentOpened
+                        Info: contract file
+                        CreatedDateTime: '2016-06-15T23:35:33+02:00'
+                      - Id: 04adfda3-dd35-4f4d-af34-d2a08a4434f6
+                        Code: 203
+                        Activity: Signed
+                        CreatedDateTime: '2016-06-15T23:38:04.1965465+02:00'
+                    RejectReason: null
+                    SignUrl: 'http://ui.signhost.com/sign/d959e67b-acf8-4a49-8811-9b62f0b450af'
+                    SignedDateTime: null
+                    RejectDateTime: null
+                    CreatedDateTime: '2016-06-15T23:33:04.1965465+02:00'
+                    ModifiedDateTime: '2016-06-15T23:33:04.1965465+02:00'
+                    Context: null
+                  - Id: b9d0f613-985d-4a5a-8e79-a83f7b5d6b55
+                    Email: anotheruser@example.com
+                    Mobile: '+31612345678'
+                    RequireScribble: true
+                    RequireSmsVerification: true
+                    SendSignRequest: true
+                    SignRequestMessage: 'Hello, could you please sign this document? Best regards, John Doe'
+                    DaysToRemind: 15
+                    ScribbleName: John Doe
+                    ScribbleNameFixed: false
+                Receivers:
+                  - Id: df52316c-6671-4f39-9b9e-b524cc36ef93
+                    Name: John Doe
+                    Email: user@example.com
+                    Language: en-US
+                    Message: 'Hello, please find enclosed the digital signed document. Best regards, John Doe'
+                    Reference: null
+                    Activities: null
+                    CreatedDateTime: '2016-06-15T23:33:04.1965465+02:00'
+                    ModifiedDateTime: '2016-06-15T23:33:04.1965465+02:00'
+                    Context: null
+                Reference: 'Contract #123'
+                PostbackUrl: 'http://example.com/postback.php'
+                SignRequestMode: 2
+                DaysToExpire: 30
+                SendEmailNotifications: true
+                CreatedDateTime: '2016-06-15T23:33:04.1965465+02:00'
+                ModifiedDateTime: '2016-06-15T23:33:04.1965465+02:00'
+                CanceledDateTime: null
+                Context: null
       deprecated: false
-      servers:
-        - url: 'https://api.signhost.com/api'
-          variables: {}
   '/file/receipt/{transactionId}':
       get:
         description: Get the transactions receipt. *Returns the receipt when the transaction is successfully signed (Status=30)*
@@ -245,9 +334,6 @@ paths:
               schema:
                 type: object
       deprecated: false
-      servers:
-        - url: 'https://api.signhost.com/api'
-          variables: {}
   '/transaction/':
     put:
       summary: Start Transaction
@@ -279,32 +365,3 @@ paths:
               schema:
                 type: object
       deprecated: false
-      servers:
-        - url: 'https://api.signhost.com/api'
-          variables: {}
-components:
-  schemas:
-    CreateTransaction-ExampleRequest:
-      title: CreateTransaction
-      required:
-        - Signers
-      type: object
-      properties:
-        Signers:
-          type: array
-          items:
-            type: object
-          description: ''
-      example:
-        Signers:
-          - Email: valid@example.org
-            ScribbleName: ExampleMan
-            SendSignRequest: false
-            SignRequestMessage: 'Hello, this is an example! Please sign this!'
-            Verifications:
-              - Type: PhoneNumber
-                Number: '+31123456789'
-              - Type: Scribble
-                RequireHandsignature: true
-tags: []
-
