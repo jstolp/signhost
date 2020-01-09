@@ -6,7 +6,7 @@ info:
   version: '1.0'
 servers:
   - url: 'https://api.signhost.com/api'
-    description: Production
+    description: Production server (uses live data)
 paths:
   '/transaction/{transactionId}':
       get:
@@ -256,7 +256,7 @@ paths:
         description: Get the transactions receipt. *Returns the receipt when the transaction is successfully signed (Status=30)*
         responses:
           '200':
-            description: returns the (signed) document(s)
+            description: returns the receipt of the signed document(s)
         parameters:
             - name: transactionId
               in: path
@@ -282,6 +282,42 @@ paths:
                 type: string
                 example: APIKey Your_API_Key
   '/transaction/{transactionId}/file/{fileId}/':
+    get:
+      description: Returns the (signed) document(s).
+      responses:
+        '200':
+          description: returns the (signed) document(s)
+      parameters:
+          - name: transactionId
+            in: path
+            description: 'The ID the transaction to GET the receipt for'
+            required: true
+            schema:
+              type: string
+              example: '67b9e140-b0f6-4c36-9b35-977041968185'
+          - name: fileId
+            in: path
+            description: 'Id of the file'
+            required: true
+            schema:
+              type: string
+              example: 'Contract.pdf'
+          - name: Application
+            in: header
+            description: 'APP key'
+            required: true
+            style: simple
+            schema:
+              type: string
+              example: APPKey NAME Your_App_Key
+          - name: Authorization
+            in: header
+            description: 'API key'
+            required: true
+            style: simple
+            schema:
+              type: string
+              example: APIKey Your_API_Key
     put:
       summary: Add File to the transaction
       description: 'Adds a file to the transaction'
