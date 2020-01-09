@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Evidos – Signhost REST API - OpenAPI v3
-  description: ''
+  description: 'Signing online documents - Easy and legally valid'
   contact: {}
   version: '1.0'
 servers:
@@ -102,7 +102,14 @@ paths:
         required: true
         schema:
           type: string
-          example: 'b2a9aca4-cd5e-4a21-b7f7-c08a9f2b2d57'
+          example: '67b9e140-b0f6-4c36-9b35-977041968185'
+      delete:
+        description: Deletes the transaction
+        responses:
+          '200':
+            description: 'The transaction is succesfully deleted'
+          '400':
+            description: 'The transaction could not be deleted'
   '/transaction':
     post:
       summary: Create Transaction - Example
@@ -155,12 +162,26 @@ paths:
       servers:
         - url: 'https://api.signhost.com/api'
           variables: {}
-  '/api/transaction/':
+  '/transaction/{transactionId}/file/{fileId}/':
     put:
       summary: Add File - Example
       description: ''
       operationId: AddFile-Example
       parameters:
+        - name: transactionId
+          in: path
+          description: 'The ID the transaction add the file'
+          required: true
+          schema:
+            type: string
+            example: '67b9e140-b0f6-4c36-9b35-977041968185'
+        - name: fileId
+          in: path
+          description: 'Id of the file'
+          required: true
+          schema:
+            type: string
+            example: 'Contract.pdf'
         - name: Content-Type
           in: header
           description: ''
@@ -185,19 +206,12 @@ paths:
           schema:
             type: string
             example: APIKey Your_API_Key
-        - name: '% response ''body'', ''req_bd9972129a534f0ca8824909b8f6dade'', ''$.Id'' %'
-          in: path
-          description: ''
-          required: true
-          style: simple
-          schema:
-            type: string
       responses:
         '200':
-          description: ''
+          description: 'The contents of the file is returned in the body.'
           headers: {}
           content:
-            text/plain:
+            application/pdf:
               schema:
                 type: object
       deprecated: false
@@ -226,13 +240,6 @@ paths:
           schema:
             type: string
             example: APIKey Your_API_Key
-        - name: '% response ''body'', ''req_bd9972129a534f0ca8824909b8f6dade'', ''$.Id'' %'
-          in: path
-          description: ''
-          required: true
-          style: simple
-          schema:
-            type: string
       responses:
         '200':
           description: ''
@@ -260,8 +267,8 @@ components:
           description: ''
       example:
         Signers:
-          - Email: EnterAValidEMailAddressHere
-            ScribbleName: Example
+          - Email: valid@example.org
+            ScribbleName: ExampleMan
             SendSignRequest: false
             SignRequestMessage: 'Hello, this is an example! Please sign this!'
             Verifications:
