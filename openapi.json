@@ -1,0 +1,560 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Evidos – Signhost REST API - OpenAPI v3",
+    "description": "Signing online documents - Easy and legally valid",
+    "contact": {},
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.signhost.com/api",
+      "description": "Production server (uses live data)"
+    }
+  ],
+  "paths": {
+    "/transaction/{transactionId}": {
+      "get": {
+        "description": "Get the transacton",
+        "summary": "Get information about a transaction",
+        "responses": {
+          "200": {
+            "description": "200 OK!",
+            "content": {
+              "application/json": {
+                "example": {
+                  "Id": "67b9e140-b0f6-4c36-9b35-977041968185",
+                  "Status": 20,
+                  "Files": {
+                    "Contract.pdf": {
+                      "Links": [
+                        {
+                          "Rel": "file",
+                          "Type": "application/pdf",
+                          "Link": "https://api.signhost.com/api/transaction/67b9e140-b0f6-4c36-9b35-977041968185/file/Contract.pdf"
+                        }
+                      ],
+                      "DisplayName": "ArbeidsContract 2016"
+                    },
+                    "Algemenevoorwaarden": {
+                      "Links": [
+                        {
+                          "Rel": "file",
+                          "Type": "application/pdf",
+                          "Link": "https://api.signhost.com/api/transaction/67b9e140-b0f6-4c36-9b35-977041968185/file/Algemenevoorwaarden"
+                        }
+                      ],
+                      "DisplayName": "Algemene voorwaarden"
+                    }
+                  },
+                  "Seal": true,
+                  "Signers": [
+                    {
+                      "Id": "e0b39ec0-e0c6-45d9-bf0d-ae8cafbe2f48",
+                      "Expires": null,
+                      "Email": "user@example.com",
+                      "Mobile": "+31612345678",
+                      "Iban": null,
+                      "BSN": null,
+                      "RequireScribbleName": false,
+                      "RequireScribble": true,
+                      "RequireEmailVerification": true,
+                      "RequireSmsVerification": true,
+                      "RequireDigidVerification": false,
+                      "RequireSurfnetVerification": false,
+                      "SendSignRequest": true,
+                      "SendSignConfirmation": null,
+                      "SignRequestMessage": "Hello, could you please sign this document? Best regards, Jay Doe",
+                      "DaysToRemind": 15,
+                      "Language": "en-US",
+                      "ScribbleName": "Jay Doe",
+                      "ScribbleNameFixed": false,
+                      "Reference": "Client #123",
+                      "ReturnUrl": "http://signhost.com",
+                      "Activities": [
+                        {
+                          "Id": "91709d15-df2e-48a1-ac90-276f0360ce08",
+                          "Code": 103,
+                          "Activity": "Opened",
+                          "CreatedDateTime": "2016-06-15T23:33:04.1965465+02:00"
+                        },
+                        {
+                          "Id": "04adfda3-dd35-4f4d-af34-d2a08a4434f6",
+                          "Code": 203,
+                          "Activity": "Signed",
+                          "CreatedDateTime": "2016-06-15T23:38:04.1965465+02:00"
+                        }
+                      ],
+                      "RejectReason": null,
+                      "SignUrl": "http://ui.signhost.com/sign/d959e67b-acf8-4a49-8811-9b62f0b450af",
+                      "SignedDateTime": null,
+                      "RejectDateTime": null,
+                      "CreatedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                      "ModifiedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                      "Context": null
+                    }
+                  ],
+                  "Receivers": [
+                    {
+                      "Id": "df52316c-6671-4f39-9b9e-b524cc36ef93",
+                      "Name": "John Doe",
+                      "Email": "user@example.com",
+                      "Language": "en-US",
+                      "Message": "Hello, please find enclosed the digital signed document. Best regards, John Doe",
+                      "Reference": null,
+                      "Activities": null,
+                      "CreatedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                      "ModifiedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                      "Context": null
+                    }
+                  ],
+                  "Reference": "Contract #123",
+                  "PostbackUrl": "http://example.com/postback.php",
+                  "SignRequestMode": 2,
+                  "DaysToExpire": 30,
+                  "SendEmailNotifications": true,
+                  "CreatedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                  "ModifiedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                  "CanceledDateTime": null,
+                  "Context": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized to access the specified transaction"
+          },
+          "410": {
+            "description": "The transaction details are no longer available and as a result the returned JSON only contains partial historical data. This happens when we cleaned the transaction for example due to reaching an end status (any status above 30), or the expiration dates have expired."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "transactionId",
+          "in": "path",
+          "description": "The ID the transaction to GET",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": "67b9e140-b0f6-4c36-9b35-977041968185"
+          }
+        }
+      ],
+      "delete": {
+        "description": "Deletes the transaction",
+        "summary": "Delete a transaction",
+        "responses": {
+          "200": {
+            "description": "The transaction is succesfully deleted"
+          },
+          "400": {
+            "description": "The transaction could not be deleted"
+          }
+        }
+      }
+    },
+    "/transaction": {
+      "post": {
+        "summary": "Create Transaction - Example",
+        "description": "",
+        "operationId": "CreateTransaction-Example",
+        "parameters": [
+          {
+            "name": "Application",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "example": "APPKey NAME Your_App_Key"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "example": "APIKey Your_API_Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "example": {
+                "Signers": [
+                  {
+                    "Email": "user@example.com",
+                    "RequireScribble": true,
+                    "SendSignRequest": true,
+                    "SignRequestMessage": "Hello, could you please sign this document? Best regards, John Doe",
+                    "DaysToRemind": 15,
+                    "ScribbleName": "John Doe",
+                    "ScribbleNameFixed": false,
+                    "Verifications": [
+                      {
+                        "Type": "iDeal"
+                      }
+                    ]
+                  },
+                  {
+                    "Email": "anotheruser@example.com",
+                    "RequireScribble": true,
+                    "SendSignRequest": true,
+                    "SignRequestMessage": "Hello, could you please sign this document? Best regards, John Doe",
+                    "DaysToRemind": 15,
+                    "ScribbleName": "John Doe",
+                    "ScribbleNameFixed": false,
+                    "Mobile": "+31612345678",
+                    "RequireSmsVerification": true
+                  }
+                ],
+                "SendEmailNotifications": true
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "This method returns the newly created transaction. (The default values for the second signer have been stripped away)",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "example": {
+                  "Id": "67b9e140-b0f6-4c36-9b35-977041968185",
+                  "Status": 20,
+                  "Seal": true,
+                  "Signers": [
+                    {
+                      "Id": "e0b39ec0-e0c6-45d9-bf0d-ae8cafbe2f48",
+                      "Expires": null,
+                      "Email": "user@example.com",
+                      "Mobile": null,
+                      "Iban": null,
+                      "BSN": null,
+                      "RequireScribbleName": false,
+                      "RequireScribble": true,
+                      "RequireEmailVerification": false,
+                      "RequireSmsVerification": false,
+                      "RequireDigidVerification": false,
+                      "RequireSurfnetVerification": false,
+                      "Verifications": [
+                        {
+                          "Type": "IPAddress",
+                          "IPAddress": "203.0.113.5"
+                        },
+                        {
+                          "Type": "iDeal"
+                        }
+                      ],
+                      "SendSignRequest": true,
+                      "SendSignConfirmation": null,
+                      "SignRequestMessage": "Hello, could you please sign this document? Best regards, John Doe",
+                      "DaysToRemind": 15,
+                      "Language": "en-US",
+                      "ScribbleName": "John Doe",
+                      "ScribbleNameFixed": false,
+                      "Reference": "Client #123",
+                      "ReturnUrl": "http://signhost.com",
+                      "Activities": [
+                        {
+                          "Id": "91709d15-df2e-48a1-ac90-276f0360ce08",
+                          "Code": 103,
+                          "Activity": "Opened",
+                          "CreatedDateTime": "2016-06-15T23:33:04.1965465+02:00"
+                        },
+                        {
+                          "Id": "3dfc9002-4d2d-467d-8266-e57b5b70a134",
+                          "Code": 105,
+                          "Activity": "DocumentOpened",
+                          "Info": "contract file",
+                          "CreatedDateTime": "2016-06-15T23:35:33+02:00"
+                        },
+                        {
+                          "Id": "04adfda3-dd35-4f4d-af34-d2a08a4434f6",
+                          "Code": 203,
+                          "Activity": "Signed",
+                          "CreatedDateTime": "2016-06-15T23:38:04.1965465+02:00"
+                        }
+                      ],
+                      "RejectReason": null,
+                      "SignUrl": "http://ui.signhost.com/sign/d959e67b-acf8-4a49-8811-9b62f0b450af",
+                      "SignedDateTime": null,
+                      "RejectDateTime": null,
+                      "CreatedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                      "ModifiedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                      "Context": null
+                    },
+                    {
+                      "Id": "b9d0f613-985d-4a5a-8e79-a83f7b5d6b55",
+                      "Email": "anotheruser@example.com",
+                      "Mobile": "+31612345678",
+                      "RequireScribble": true,
+                      "RequireSmsVerification": true,
+                      "SendSignRequest": true,
+                      "SignRequestMessage": "Hello, could you please sign this document? Best regards, John Doe",
+                      "DaysToRemind": 15,
+                      "ScribbleName": "John Doe",
+                      "ScribbleNameFixed": false
+                    }
+                  ],
+                  "Receivers": [
+                    {
+                      "Id": "df52316c-6671-4f39-9b9e-b524cc36ef93",
+                      "Name": "John Doe",
+                      "Email": "user@example.com",
+                      "Language": "en-US",
+                      "Message": "Hello, please find enclosed the digital signed document. Best regards, John Doe",
+                      "Reference": null,
+                      "Activities": null,
+                      "CreatedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                      "ModifiedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                      "Context": null
+                    }
+                  ],
+                  "Reference": "Contract #123",
+                  "PostbackUrl": "http://example.com/postback.php",
+                  "SignRequestMode": 2,
+                  "DaysToExpire": 30,
+                  "SendEmailNotifications": true,
+                  "CreatedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                  "ModifiedDateTime": "2016-06-15T23:33:04.1965465+02:00",
+                  "CanceledDateTime": null,
+                  "Context": null
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/file/receipt/{transactionId}": {
+      "get": {
+        "description": "Get the transactions receipt. *Returns the receipt when the transaction is successfully signed (Status=30)*",
+        "responses": {
+          "200": {
+            "description": "returns the receipt of the signed document(s)"
+          }
+        },
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "description": "The ID the transaction to GET the receipt for",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "67b9e140-b0f6-4c36-9b35-977041968185"
+            }
+          },
+          {
+            "name": "Application",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "example": "APPKey NAME Your_App_Key"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "example": "APIKey Your_API_Key"
+            }
+          }
+        ]
+      }
+    },
+    "/transaction/{transactionId}/file/{fileId}/": {
+      "get": {
+        "description": "Returns the (signed) document(s).",
+        "responses": {
+          "200": {
+            "description": "returns the (signed) document(s)"
+          }
+        },
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "description": "The ID the transaction to GET the receipt for",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "67b9e140-b0f6-4c36-9b35-977041968185"
+            }
+          },
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "Id of the file",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Contract.pdf"
+            }
+          },
+          {
+            "name": "Application",
+            "in": "header",
+            "description": "APP key",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "example": "APPKey NAME Your_App_Key"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "API key",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "example": "APIKey Your_API_Key"
+            }
+          }
+        ]
+      },
+      "put": {
+        "summary": "Add File to the transaction",
+        "description": "Adds a file to the transaction",
+        "operationId": "AddFile",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "description": "The ID the transaction add the file",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "67b9e140-b0f6-4c36-9b35-977041968185"
+            }
+          },
+          {
+            "name": "fileId",
+            "in": "path",
+            "description": "Id of the file",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "Contract.pdf"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "example": "application/pdf"
+            }
+          },
+          {
+            "name": "Application",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "example": "APPKey NAME Your_App_Key"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "example": "APIKey Your_API_Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The contents of the file is returned in the body.",
+            "headers": {},
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/transaction/": {
+      "put": {
+        "summary": "Start Transaction",
+        "description": "",
+        "operationId": "StartTransaction",
+        "parameters": [
+          {
+            "name": "Application",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "example": "APPKey NAME Your_App_Key"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string",
+              "example": "APIKey Your_API_Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {},
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  }
+}
